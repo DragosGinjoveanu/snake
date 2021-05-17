@@ -81,59 +81,57 @@
           //works
           if (event.key == 'ArrowUp') {
             if (headRow - 1 >= 1 && table[headRow - 1][headColumn] != 1) {
-              updateSnake("up", headRow - 1, headColumn);
+              updateSnake(headRow - 1, headColumn);
             } else {
               lostGame();
             }
           } else if (event.key == 'ArrowDown') {
             if (headRow + 1 <= 15 && table[headRow + 1][headColumn] != 1) {
-              updateSnake("down", headRow + 1, headColumn);
+              updateSnake(headRow + 1, headColumn);
             } else {
               lostGame();
             }
           } else if (event.key == 'ArrowLeft') {
             if (headColumn - 1 >= 1 && table[headRow][headColumn - 1] != 1) {
-              updateSnake("left", headRow, headColumn - 1);
+              updateSnake(headRow, headColumn - 1);
             } else {
               lostGame();
             }
           } else if (event.key == 'ArrowRight') {
             if (headColumn + 1 <= 15 && table[headRow][headColumn + 1] != 1) {
-              updateSnake("right", headRow, headColumn + 1);
+              updateSnake(headRow, headColumn + 1);
             } else {
               lostGame();
             }
           }
       });
 
-      function updateSnake(key, row, column) {
-        
+      function updateSnake(row, column) {
+        // se transmit ok
+        // alert(row);
+        // alert(column);
         if (table[row][column] == 0) {
           //stergem primul element;
-          table[snakeRow[1]][snakeColumn[1]] = 0;
-          var firstId = snakeRow[1] * 10 + String(snakeColumn[1]);
-          document.getElementById(id).innerHTML = ('󠀠󠀠<i class="las la-stop"></i>');
-          document.getElementById(id).className = "btn btn-secondary btn-lg"; 
+          //trb sa mai testez daca merge bine
+          table[snakeRow[0]][snakeColumn[0]] = 0;
+          var firstId = snakeRow[0] + String(snakeColumn[0]);
+          document.getElementById(firstId).innerHTML = ('󠀠󠀠<i class="las la-stop"></i>');
+          document.getElementById(firstId).className = "btn btn-secondary btn-lg"; 
           snakeRow.shift();
           snakeColumn.shift();
           //adaugam ultimul element
           snakeRow.push(row);
-          snakeRow.push(column);
+          snakeColumn.push(column);
           table[row][column] = 1;
-          var firstId = row * 10 + String(column);
-          document.getElementById(id).innerHTML = ('󠀠󠀠<i class="las la-horse-head"></i>');
-          document.getElementById(id).className = "btn btn-success btn-lg"; 
-
-
-
-          // if (key == "right") {
-
-          // } else if (key == "left") {
-
-          // } else if (key == "up") {
-
-          // } else if (key == "down") {
-
+          var SecondId = row + String(column);
+          //alert(SecondId);
+          document.getElementById(SecondId).innerHTML = ('󠀠󠀠<i class="las la-horse-head"></i>');
+          document.getElementById(SecondId).className = "btn btn-success btn-lg"; 
+          // for (var i = 0; i < snakeRow.length; i++) {
+          //   alert(snakeRow[i]);
+          // }
+          // for (var i = 0; i < snakeColumn.length; i++) {
+          //   alert(snakeColumn[i]);
           // }
         } else if (table[row][column] == 2) {
           aler("ok");
