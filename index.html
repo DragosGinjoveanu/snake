@@ -31,7 +31,7 @@
     </div>
     <script type="text/javascript">
       
-      // declar tabela, 0 deocamdata peste tot.
+      //declar tabela, 0 deocamdata peste tot.
       var table = [];
       for (var i = 1; i <= 15; i++) {
           table[i] = [];
@@ -63,7 +63,7 @@
         }
       }
 
-      // generates table + initial snake position
+      //generates snake + initial snake position
       function loadSnake() {
         for (var i = 1; i <= 15; i++) {
           $('#table').append(`
@@ -76,8 +76,7 @@
             // sarpele initial
             if ((i == 1 && j == 1) || (i == 1 && j == 2) || (i == 1 && j == 3)) {
               var id = i + String(j);
-              document.getElementById(id).innerHTML = ('󠀠󠀠<i class="las la-horse-head"></i>');
-              document.getElementById(id).className = "btn btn-success btn-lg"; 
+              lengthenSnake(id);
               snakeRow.push(i);
               snakeColumn.push(j);
               table[i][j] = 1;
@@ -119,12 +118,8 @@
       });
 
       function updateSnake(row, column) {
-        // se transmit ok
-        // alert(row);
-        // alert(column);
         if (table[row][column] == 0) {
           //stergem primul element;
-          //trb sa mai testez daca merge bine
           table[snakeRow[0]][snakeColumn[0]] = 0;
           var firstId = snakeRow[0] + String(snakeColumn[0]);
           document.getElementById(firstId).innerHTML = ('󠀠󠀠<i class="las la-stop"></i>');
@@ -135,28 +130,24 @@
           snakeRow.push(row);
           snakeColumn.push(column);
           table[row][column] = 1;
-          var SecondId = row + String(column);
-          //alert(SecondId);
-          document.getElementById(SecondId).innerHTML = ('󠀠󠀠<i class="las la-horse-head"></i>');
-          document.getElementById(SecondId).className = "btn btn-success btn-lg"; 
-          // for (var i = 0; i < snakeRow.length; i++) {
-          //   alert(snakeRow[i]);
-          // }
-          // for (var i = 0; i < snakeColumn.length; i++) {
-          //   alert(snakeColumn[i]);
-          // }
+          var secondId = row + String(column);
+          lengthenSnake(secondId);
         } else if (table[row][column] == 2) {
           snakeRow.push(row);
           snakeColumn.push(column);
           table[row][column] = 1;
           var id = row + String(column);
-          document.getElementById(id).innerHTML = ('󠀠󠀠<i class="las la-horse-head"></i>');
-          document.getElementById(id).className = "btn btn-success btn-lg"; 
+          lengthenSnake(id);
           score++;
           document.getElementById("score").innerHTML = "Score: " + score; 
           generateFood();
         }
         
+      }
+
+      function lengthenSnake(id) {
+          document.getElementById(id).innerHTML = ('󠀠󠀠<i class="las la-horse-head"></i>');
+          document.getElementById(id).className = "btn btn-success btn-lg"; 
       }
 
       function lostGame() {
