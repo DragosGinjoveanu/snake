@@ -21,6 +21,7 @@
           <button type="button" class="btn btn-success" onclick="loadSnake();">Play<i class="las la-hand-point-up"></i></button>
           <button type="button" class="btn btn-danger" onclick="restartGame();"><i class="las la-redo-alt"></i></button>
           <h3 id = "status"></h3>
+          <h3 id = "score">Score:</h3>
         </div>
         <div class="card-body mx-auto">
             <table id="table">
@@ -39,16 +40,27 @@
           }
       }
 
+      var score = 0;
       var snakeRow = [];
       var snakeColumn = [];
 
       function generateFood() {
         var i = Math.floor(Math.random() * (15) + 1);
         var j = Math.floor(Math.random() * (15) + 1);
-        table[i][j] = 2;
-        var id = i + String(j);
-        document.getElementById(id).innerHTML = ('󠀠󠀠<i class="las la-apple-alt"></i>');
-        document.getElementById(id).className = "btn btn-danger btn-lg"; 
+        var ok = 1;
+        for (var a = 0; a < snakeRow.length; a++) {
+          if (snakeRow[a] == i && snakeColumn[a] == j) {
+            ok = 0;
+          }
+        }
+        if (ok == 1) {
+          table[i][j] = 2;
+          var id = i + String(j);
+          document.getElementById(id).innerHTML = ('󠀠󠀠<i class="las la-apple-alt"></i>');
+          document.getElementById(id).className = "btn btn-danger btn-lg"; 
+        } else {
+          generateFood();
+        }
       }
 
       // generates table + initial snake position
@@ -134,7 +146,15 @@
           //   alert(snakeColumn[i]);
           // }
         } else if (table[row][column] == 2) {
-          aler("ok");
+          snakeRow.push(row);
+          snakeColumn.push(column);
+          table[row][column] = 1;
+          var id = row + String(column);
+          document.getElementById(id).innerHTML = ('󠀠󠀠<i class="las la-horse-head"></i>');
+          document.getElementById(id).className = "btn btn-success btn-lg"; 
+          score++;
+          document.getElementById("score").innerHTML = "Score: " + score; 
+          generateFood();
         }
         
       }
