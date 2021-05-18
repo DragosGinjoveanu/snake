@@ -128,6 +128,8 @@ function lengthenSnake(id) {
 function lostGame() {
     document.getElementById("status").innerHTML = "You lost! Please restart!";
     document.getElementById("status").style.color = "red";
+    document.getElementById("table").innerHTML = " ";
+
 }
 
 function restartGame() {
