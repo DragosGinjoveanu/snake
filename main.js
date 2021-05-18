@@ -1,14 +1,3 @@
-//game board
-var table = [];
-for (var i = 1; i <= 15; i++) {
-    table[i] = [];
-    for (var j = 1; j <= 15; j++) {
-        table[i][j] = 0;
-    }
-}
-
-var score = 0;
-var snakeRow = [];
 var snakeColumn = [];
 var timeout;
 
@@ -59,39 +48,22 @@ document.addEventListener('keyup', (event) => {
     var headRow = snakeRow[snakeRow.length - 1];
     var headColumn = snakeColumn[snakeColumn.length - 1];
     if (event.key == 'ArrowUp') {
-      if (headRow - 1 >= 1 && table[headRow - 1][headColumn] != 1) {
-        clearTimeout(timeout);
-        updateSnake(headRow - 1, headColumn, "down");
-      } else {
-        lostGame();
-      }
+      clearTimeout(timeout);
+      checkSnake(headRow - 1, headColumn, "up");
     } else if (event.key == 'ArrowDown') {
-      if (headRow + 1 <= 15 && table[headRow + 1][headColumn] != 1) {
-        clearTimeout(timeout);
-        updateSnake(headRow + 1, headColumn, "up");
-      } else {
-        lostGame();
-      }
+      clearTimeout(timeout);
+      checkSnake(headRow + 1, headColumn, "down");
     } else if (event.key == 'ArrowLeft') {
-      if (headColumn - 1 >= 1 && table[headRow][headColumn - 1] != 1) {
-        clearTimeout(timeout);
-        updateSnake(headRow, headColumn - 1, "left");
-      } else {
-        lostGame();
-      }
+      clearTimeout(timeout);
+      checkSnake(headRow, headColumn - 1, "left");
     } else if (event.key == 'ArrowRight') {
-      if (headColumn + 1 <= 15 && table[headRow][headColumn + 1] != 1) {
-        clearTimeout(timeout);
-        updateSnake(headRow, headColumn + 1, "right");
-      } else {
-        lostGame();
-      }
+      clearTimeout(timeout);
+      checkSnake(headRow, headColumn + 1, "right");
     }
 });
 
 //makes the snake move in the wanted direction every half a second.
 function updateSnake(row, column, key) {
-  //trb sa pun conditia daca e in tablea sau nu
   if (table[row][column] == 0) {
     table[snakeRow[0]][snakeColumn[0]] = 0;
     var firstId = snakeRow[0] + String(snakeColumn[0]);
@@ -115,16 +87,25 @@ function updateSnake(row, column, key) {
     generateFood();
   }
   if (key == "right") {
-    timeout = setTimeout(function(){updateSnake(row, column + 1, "right")}, 500);
+    timeout = setTimeout(function(){checkSnake(row, column + 1, "right")}, 500);
   }
   if (key == "left") {
-    timeout = setTimeout(function(){updateSnake(row, column - 1, "left")}, 500);
+    timeout = setTimeout(function(){checkSnake(row, column - 1, "left")}, 500);
   }
   if (key == "up") {
-    timeout = setTimeout(function(){updateSnake(row + 1, column, "up")}, 500);
+    timeout = setTimeout(function(){checkSnake(row - 1, column, "up")}, 500);
   }
   if (key == "down") {
-    timeout = setTimeout(function(){updateSnake(row - 1, column, "down")}, 500);
+    timeout = setTimeout(function(){checkSnake(row + 1, column, "down")}, 500);
+  }
+}
+
+//checks if snake is on the game board
+function checkSnake(row, column, key) {
+  if (row >= 1 && row <= 15 && column >= 1 && column <= 15 && table[row][column] != 1) {
+    updateSnake(row, column, key);
+  } else {
+    lostGame();
   }
 }
 
