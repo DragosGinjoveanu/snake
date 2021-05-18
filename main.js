@@ -1,3 +1,14 @@
+//game board
+var table = [];
+for (var i = 1; i <= 15; i++) {
+    table[i] = [];
+    for (var j = 1; j <= 15; j++) {
+        table[i][j] = 0;
+    }
+}
+
+var score = 0;
+var snakeRow = [];
 var snakeColumn = [];
 var timeout;
 
@@ -13,7 +24,7 @@ function generateFood() {
   }
   if (ok == 1) {
     table[i][j] = 2;
-    var id = i + String(j);
+    var id = i + " " + String(j);
     document.getElementById(id).innerHTML = ('󠀠󠀠<i class="las la-apple-alt"></i>');
     document.getElementById(id).className = "btn btn-danger btn-lg"; 
   } else {
@@ -29,10 +40,10 @@ function loadSnake() {
     `)
     for (var j = 1; j <= 15; j++) {
       $('#table').append(`
-        <td><button type="button" class="btn btn-secondary btn-lg" id = "` + i + + j +`"><i class="las la-stop"></i></button></td>
+        <td><button type="button" class="btn btn-secondary btn-lg" id = "` + i + " " + j +`"><i class="las la-stop"></i></button></td>
       `);
       if ((i == 1 && j == 1) || (i == 1 && j == 2) || (i == 1 && j == 3)) {
-        var id = i + String(j);
+        var id = i + " " + String(j);
         lengthenSnake(id);
         snakeRow.push(i);
         snakeColumn.push(j);
@@ -66,7 +77,7 @@ document.addEventListener('keyup', (event) => {
 function updateSnake(row, column, key) {
   if (table[row][column] == 0) {
     table[snakeRow[0]][snakeColumn[0]] = 0;
-    var firstId = snakeRow[0] + String(snakeColumn[0]);
+    var firstId = snakeRow[0] + " " + String(snakeColumn[0]);
     document.getElementById(firstId).innerHTML = ('󠀠󠀠<i class="las la-stop"></i>');
     document.getElementById(firstId).className = "btn btn-secondary btn-lg"; 
     snakeRow.shift();
@@ -74,13 +85,13 @@ function updateSnake(row, column, key) {
     snakeRow.push(row);
     snakeColumn.push(column);
     table[row][column] = 1;
-    var secondId = row + String(column);
+    var secondId = row + " " + String(column);
     lengthenSnake(secondId);
   } else if (table[row][column] == 2) {
     snakeRow.push(row);
     snakeColumn.push(column);
     table[row][column] = 1;
-    var id = row + String(column);
+    var id = row + " " + String(column);
     lengthenSnake(id);
     score++;
     document.getElementById("score").innerHTML = "Score: " + score; 
