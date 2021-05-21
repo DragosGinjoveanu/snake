@@ -16,13 +16,7 @@ var timeout;
 function generateFood() {
   var i = Math.floor(Math.random() * (15) + 1);
   var j = Math.floor(Math.random() * (15) + 1);
-  var ok = 1;
-  for (var a = 0; a < snakeRow.length; a++) {
-    if (snakeRow[a] == i && snakeColumn[a] == j) {
-      ok = 0;
-    }
-  }
-  if (ok == 1) {
+  if (isInSnake(i, j) == 0) {
     table[i][j] = 2;
     var id = i + " " + String(j);
     document.getElementById(id).innerHTML = ('󠀠󠀠<i class="las la-apple-alt"></i>');
@@ -59,17 +53,14 @@ function loadSnake() {
 document.addEventListener('keyup', (event) => {
     var headRow = snakeRow[snakeRow.length - 1];
     var headColumn = snakeColumn[snakeColumn.length - 1];
+    clearTimeout(timeout);
     if (event.key == 'ArrowUp') {
-      clearTimeout(timeout);
       checkSnake(headRow - 1, headColumn, "up");
     } else if (event.key == 'ArrowDown') {
-      clearTimeout(timeout);
       checkSnake(headRow + 1, headColumn, "down");
     } else if (event.key == 'ArrowLeft') {
-      clearTimeout(timeout);
       checkSnake(headRow, headColumn - 1, "left");
     } else if (event.key == 'ArrowRight') {
-      clearTimeout(timeout);
       checkSnake(headRow, headColumn + 1, "right");
     }
 });
@@ -77,19 +68,15 @@ document.addEventListener('keyup', (event) => {
 //moves snake's tail
 function updateSnakeTail(row, column) {
   table[snakeRow[0]][snakeColumn[0]] = 0;
-  var firstId = snakeRow[0] + " " + String(snakeColumn[0]);
-  document.getElementById(firstId).innerHTML = ('󠀠󠀠<i class="las la-stop"></i>');
-  document.getElementById(firstId).className = "btn btn-secondary btn-lg"; 
+  var id = snakeRow[0] + " " + String(snakeColumn[0]);
+  document.getElementById(id).innerHTML = ('󠀠󠀠<i class="las la-stop"></i>');
+  document.getElementById(id).className = "btn btn-secondary btn-lg"; 
   snakeRow.shift();
   snakeColumn.shift();
-  var secondId = row + " " + String(column);
-  lengthenSnake(secondId);
 }
 
 //moves snake's head
 function updateSnakeHead(row, column) {
-  var id = row + " " + String(column);
-  lengthenSnake(id);
   score++;
   document.getElementById("score").innerHTML = "Score: " + score; 
   generateFood();
@@ -99,6 +86,8 @@ function updateSnakeHead(row, column) {
 function updateSnake(row, column, key) {
   snakeRow.push(row);
   snakeColumn.push(column);
+  var id = row + " " + String(column);
+  lengthenSnake(id);
   if (table[row][column] == 0) {
     updateSnakeTail(row, column);
   } else if (table[row][column] == 2) {
@@ -121,7 +110,7 @@ function updateSnake(row, column, key) {
 
 //checks if snake is on the game board
 function checkSnake(row, column, key) {
-  if (isInTable(row, column) && notCurlingUp(row, column)) {
+  if (isInTable(row, column) && isInSnake(row, column) == 0) {
     updateSnake(row, column, key);
   } else {
     lostGame();
@@ -136,9 +125,9 @@ function isInTable(row, column) {
   return false;
 }
 
-//checks if the snake is not curling up
-function notCurlingUp(row, column) {
-  if (table[row][column] != 1) {
+//checks if the given block is part of the snake
+function isInSnake(row, column) {
+  if (table[row][column] == 1) {
     return true;
   }
   return false;
