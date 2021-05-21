@@ -42,14 +42,15 @@ function loadSnake() {
       $('#table').append(`
         <td><button type="button" class="btn btn-secondary btn-lg" id = "` + i + " " + j +`"><i class="las la-stop"></i></button></td>
       `);
-      if ((i == 1 && j == 1) || (i == 1 && j == 2) || (i == 1 && j == 3)) {
-        var id = i + " " + String(j);
-        lengthenSnake(id);
-        snakeRow.push(i);
-        snakeColumn.push(j);
-        table[i][j] = 1;
-      }
     }
+  }
+  var i = 1;
+  for (var j = 1; j <= 3; j++) {
+    var id = i + " " + String(j);
+    lengthenSnake(id);
+    snakeRow.push(i);
+    snakeColumn.push(j);
+    table[i][j] = 1;
   }
   generateFood();
 }
@@ -73,30 +74,37 @@ document.addEventListener('keyup', (event) => {
     }
 });
 
+//moves snake's tail
+function updateSnakeTail(row, column) {
+  table[snakeRow[0]][snakeColumn[0]] = 0;
+  var firstId = snakeRow[0] + " " + String(snakeColumn[0]);
+  document.getElementById(firstId).innerHTML = ('󠀠󠀠<i class="las la-stop"></i>');
+  document.getElementById(firstId).className = "btn btn-secondary btn-lg"; 
+  snakeRow.shift();
+  snakeColumn.shift();
+  var secondId = row + " " + String(column);
+  lengthenSnake(secondId);
+}
+
+//moves snake's head
+function updateSnakeHead(row, column) {
+  var id = row + " " + String(column);
+  lengthenSnake(id);
+  score++;
+  document.getElementById("score").innerHTML = "Score: " + score; 
+  generateFood();
+}
+
 //makes the snake move in the wanted direction every half a second.
 function updateSnake(row, column, key) {
+  snakeRow.push(row);
+  snakeColumn.push(column);
   if (table[row][column] == 0) {
-    table[snakeRow[0]][snakeColumn[0]] = 0;
-    var firstId = snakeRow[0] + " " + String(snakeColumn[0]);
-    document.getElementById(firstId).innerHTML = ('󠀠󠀠<i class="las la-stop"></i>');
-    document.getElementById(firstId).className = "btn btn-secondary btn-lg"; 
-    snakeRow.shift();
-    snakeColumn.shift();
-    snakeRow.push(row);
-    snakeColumn.push(column);
-    table[row][column] = 1;
-    var secondId = row + " " + String(column);
-    lengthenSnake(secondId);
+    updateSnakeTail(row, column);
   } else if (table[row][column] == 2) {
-    snakeRow.push(row);
-    snakeColumn.push(column);
-    table[row][column] = 1;
-    var id = row + " " + String(column);
-    lengthenSnake(id);
-    score++;
-    document.getElementById("score").innerHTML = "Score: " + score; 
-    generateFood();
+    updateSnakeHead(row, column);
   }
+  table[row][column] = 1;
   if (key == "right") {
     timeout = setTimeout(function(){checkSnake(row, column + 1, "right")}, 500);
   }
@@ -113,11 +121,27 @@ function updateSnake(row, column, key) {
 
 //checks if snake is on the game board
 function checkSnake(row, column, key) {
-  if (row >= 1 && row <= 15 && column >= 1 && column <= 15 && table[row][column] != 1) {
+  if (isInTable(row, column) && notCurlingUp(row, column)) {
     updateSnake(row, column, key);
   } else {
     lostGame();
   }
+}
+
+//checks if the snake is in table
+function isInTable(row, column) {
+  if (row >= 1 && row <= 15 && column >= 1 && column <= 15) {
+    return true;
+  }
+  return false;
+}
+
+//checks if the snake is not curling up
+function notCurlingUp(row, column) {
+  if (table[row][column] != 1) {
+    return true;
+  }
+  return false;
 }
 
 function lengthenSnake(id) {
@@ -129,7 +153,6 @@ function lostGame() {
     document.getElementById("status").innerHTML = "You lost! Please restart!";
     document.getElementById("status").style.color = "red";
     document.getElementById("table").innerHTML = " ";
-
 }
 
 function restartGame() {
