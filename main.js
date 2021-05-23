@@ -14,8 +14,8 @@ var timeout;
 
 //generates the next "apple" you need to eat
 function generateFood() {
-  var i = Math.floor(Math.random() * (15) + 1);
-  var j = Math.floor(Math.random() * (15) + 1);
+  var i = Math.floor(Math.random() * 15 + 1);
+  var j = Math.floor(Math.random() * 15 + 1);
   if (isInSnake(i, j) == 0) {
     table[i][j] = 2;
     var id = i + " " + String(j);
@@ -54,15 +54,30 @@ document.addEventListener('keyup', (event) => {
     var headRow = snakeRow[snakeRow.length - 1];
     var headColumn = snakeColumn[snakeColumn.length - 1];
     clearTimeout(timeout);
+    var arrow = {};
     if (event.key == 'ArrowUp') {
-      checkSnake(headRow - 1, headColumn, "up");
+      arrow.head = headRow - 1;
+      arrow.column = headColumn;
+      arrow.key = "up";
+      //checkSnake(headRow - 1, headColumn, "up");
     } else if (event.key == 'ArrowDown') {
-      checkSnake(headRow + 1, headColumn, "down");
+      arrow.head = headRow + 1;
+      arrow.column = headColumn;
+      arrow.key = "down";
+      //checkSnake(headRow + 1, headColumn, "down");
     } else if (event.key == 'ArrowLeft') {
-      checkSnake(headRow, headColumn - 1, "left");
+      arrow.head = headRow;
+      arrow.column = headColumn - 1;
+      arrow.key = "left";
+     // checkSnake(headRow, headColumn - 1, "left");
     } else if (event.key == 'ArrowRight') {
-      checkSnake(headRow, headColumn + 1, "right");
+      arrow.head = headRow;
+      arrow.column = headColumn + 1;
+      arrow.key = "right";
+      //checkSnake(headRow, headColumn + 1, "right");
     }
+
+    checkSnake(arrow.head,arrow.column, arrow.key);
 });
 
 //moves snake's tail
