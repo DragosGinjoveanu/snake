@@ -58,26 +58,21 @@ document.addEventListener('keyup', (event) => {
     if (event.key == 'ArrowUp') {
       arrow.head = headRow - 1;
       arrow.column = headColumn;
-      arrow.key = "up";
       //checkSnake(headRow - 1, headColumn, "up");
     } else if (event.key == 'ArrowDown') {
       arrow.head = headRow + 1;
       arrow.column = headColumn;
-      arrow.key = "down";
       //checkSnake(headRow + 1, headColumn, "down");
     } else if (event.key == 'ArrowLeft') {
       arrow.head = headRow;
       arrow.column = headColumn - 1;
-      arrow.key = "left";
      // checkSnake(headRow, headColumn - 1, "left");
     } else if (event.key == 'ArrowRight') {
       arrow.head = headRow;
       arrow.column = headColumn + 1;
-      arrow.key = "right";
       //checkSnake(headRow, headColumn + 1, "right");
     }
-
-    checkSnake(arrow.head,arrow.column, arrow.key);
+    checkSnake(arrow.head, arrow.column, event.key);
 });
 
 //moves snake's tail
@@ -109,17 +104,17 @@ function updateSnake(row, column, key) {
     updateSnakeHead(row, column);
   }
   table[row][column] = 1;
-  if (key == "right") {
-    timeout = setTimeout(function(){checkSnake(row, column + 1, "right")}, 500);
+  if (key == "ArrowRight") {
+    timeout = setTimeout(function(){checkSnake(row, column + 1, "ArrowRight")}, 500);
   }
-  if (key == "left") {
-    timeout = setTimeout(function(){checkSnake(row, column - 1, "left")}, 500);
+  if (key == "ArrowLeft") {
+    timeout = setTimeout(function(){checkSnake(row, column - 1, "ArrowLeft")}, 500);
   }
-  if (key == "up") {
-    timeout = setTimeout(function(){checkSnake(row - 1, column, "up")}, 500);
+  if (key == "ArrowUp") {
+    timeout = setTimeout(function(){checkSnake(row - 1, column, "ArrowUp")}, 500);
   }
-  if (key == "down") {
-    timeout = setTimeout(function(){checkSnake(row + 1, column, "down")}, 500);
+  if (key == "ArrowDown") {
+    timeout = setTimeout(function(){checkSnake(row + 1, column, "ArrowDown")}, 500);
   }
 }
 
