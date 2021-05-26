@@ -1,8 +1,8 @@
 //game board
 var table = [];
-for (var i = 1; i <= 15; i++) {
+for (var i = 1; i <= 9; i++) {
     table[i] = [];
-    for (var j = 1; j <= 15; j++) {
+    for (var j = 1; j <= 9; j++) {
         table[i][j] = 0;
     }
 }
@@ -14,8 +14,8 @@ var timeout;
 
 //generates the next "apple" you need to eat
 function generateFood() {
-  var i = Math.floor(Math.random() * 15 + 1);
-  var j = Math.floor(Math.random() * 15 + 1);
+  var i = Math.floor(Math.random() * 9 + 1);
+  var j = Math.floor(Math.random() * 9 + 1);
   if (isInSnake(i, j) == 0) {
     table[i][j] = 2;
     var id = i + " " + String(j);
@@ -28,11 +28,11 @@ function generateFood() {
 
 //generates snake + initial snake position
 function loadSnake() {
-  for (var i = 1; i <= 15; i++) {
+  for (var i = 1; i <= 9; i++) {
     $('#table').append(`
       <tr></tr>
     `)
-    for (var j = 1; j <= 15; j++) {
+    for (var j = 1; j <= 9; j++) {
       $('#table').append(`
         <td><button type="button" class="btn btn-secondary btn-lg" id = "` + i + " " + j +`"><i class="las la-stop"></i></button></td>
       `);
@@ -122,7 +122,7 @@ function checkSnake(row, column, key) {
 
 //checks if the snake is in table
 function isInTable(row, column) {
-  if (row >= 1 && row <= 15 && column >= 1 && column <= 15) {
+  if (row >= 1 && row <= 9 && column >= 1 && column <= 9) {
     return true;
   }
   return false;
