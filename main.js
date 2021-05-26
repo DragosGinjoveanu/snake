@@ -54,25 +54,18 @@ document.addEventListener('keyup', (event) => {
     var headRow = snakeRow[snakeRow.length - 1];
     var headColumn = snakeColumn[snakeColumn.length - 1];
     clearTimeout(timeout);
-    var arrow = {};
-    if (event.key == 'ArrowUp') {
-      arrow.head = headRow - 1;
-      arrow.column = headColumn;
-      //checkSnake(headRow - 1, headColumn, "up");
-    } else if (event.key == 'ArrowDown') {
-      arrow.head = headRow + 1;
-      arrow.column = headColumn;
-      //checkSnake(headRow + 1, headColumn, "down");
-    } else if (event.key == 'ArrowLeft') {
-      arrow.head = headRow;
-      arrow.column = headColumn - 1;
-     // checkSnake(headRow, headColumn - 1, "left");
-    } else if (event.key == 'ArrowRight') {
-      arrow.head = headRow;
-      arrow.column = headColumn + 1;
-      //checkSnake(headRow, headColumn + 1, "right");
+    var arrow = {
+      ArrowUp: [headRow - 1, headColumn],
+      ArrowDown: [headRow + 1, headColumn],
+      ArrowLeft: [headRow, headColumn - 1],
+      ArrowRight: [headRow, headColumn + 1]
+    };
+    for (const [key, value] of Object.entries(arrow)) {
+      if(event.key == `${key}`) {
+        var cell = `${value}`;
+        checkSnake(parseInt(cell[0]), parseInt(cell[2]), event.key);
+      }
     }
-    checkSnake(arrow.head, arrow.column, event.key);
 });
 
 //moves snake's tail
