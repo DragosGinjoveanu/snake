@@ -12,6 +12,22 @@ var snakeRow = [];
 var snakeColumn = [];
 var timeout;
 
+//checks if the snake is in table
+function isInTable(row, column) {
+  if (row >= 1 && row <= 9 && column >= 1 && column <= 9) {
+    return true;
+  }
+  return false;
+}
+
+//checks if the given block is part of the snake
+function isInSnake(row, column) {
+  if (table[row][column] == 1) {
+    return true;
+  }
+  return false;
+}
+
 //generates the next "apple" you need to eat
 function generateFood() {
   var i = Math.floor(Math.random() * 9 + 1);
@@ -24,6 +40,11 @@ function generateFood() {
   } else {
     generateFood();
   }
+}
+
+function lengthenSnake(id) {
+    document.getElementById(id).innerHTML = ('󠀠󠀠<i class="las la-horse-head"></i>');
+    document.getElementById(id).className = "btn btn-success btn-lg"; 
 }
 
 //generates snake + initial snake position
@@ -49,24 +70,12 @@ function loadSnake() {
   generateFood();
 }
 
-//changes the snake's direction
-document.addEventListener('keyup', (event) => {
-    var headRow = snakeRow[snakeRow.length - 1];
-    var headColumn = snakeColumn[snakeColumn.length - 1];
-    clearTimeout(timeout);
-    var arrow = {
-      ArrowUp: [headRow - 1, headColumn],
-      ArrowDown: [headRow + 1, headColumn],
-      ArrowLeft: [headRow, headColumn - 1],
-      ArrowRight: [headRow, headColumn + 1]
-    };
-    for (const [key, value] of Object.entries(arrow)) {
-      if(event.key == `${key}`) {
-        var cell = `${value}`;
-        checkSnake(parseInt(cell[0]), parseInt(cell[cell.length - 1]), event.key);
-      }
-    }
-});
+//moves snake's head
+function updateSnakeHead(row, column) {
+  score++;
+  document.getElementById("score").innerHTML = "Score: " + score; 
+  generateFood();
+}
 
 //moves snake's tail
 function updateSnakeTail(row, column) {
@@ -76,13 +85,6 @@ function updateSnakeTail(row, column) {
   document.getElementById(id).className = "btn btn-secondary btn-lg"; 
   snakeRow.shift();
   snakeColumn.shift();
-}
-
-//moves snake's head
-function updateSnakeHead(row, column) {
-  score++;
-  document.getElementById("score").innerHTML = "Score: " + score; 
-  generateFood();
 }
 
 //makes the snake move in the wanted direction every half a second.
@@ -107,6 +109,12 @@ function updateSnake(row, column, key) {
   timeout = setTimeout(function(){checkSnake(parseInt(cell[0]), parseInt(cell[cell.length - 1]), key)}, 500);
 }
 
+function lostGame() {
+    document.getElementById("status").innerHTML = "You lost! Please restart!";
+    document.getElementById("status").style.color = "red";
+    document.getElementById("table").innerHTML = " ";
+}
+
 //checks if snake is on the game board
 function checkSnake(row, column, key) {
   if (isInTable(row, column) && isInSnake(row, column) == 0) {
@@ -116,32 +124,24 @@ function checkSnake(row, column, key) {
   }
 }
 
-//checks if the snake is in table
-function isInTable(row, column) {
-  if (row >= 1 && row <= 9 && column >= 1 && column <= 9) {
-    return true;
-  }
-  return false;
-}
-
-//checks if the given block is part of the snake
-function isInSnake(row, column) {
-  if (table[row][column] == 1) {
-    return true;
-  }
-  return false;
-}
-
-function lengthenSnake(id) {
-    document.getElementById(id).innerHTML = ('󠀠󠀠<i class="las la-horse-head"></i>');
-    document.getElementById(id).className = "btn btn-success btn-lg"; 
-}
-
-function lostGame() {
-    document.getElementById("status").innerHTML = "You lost! Please restart!";
-    document.getElementById("status").style.color = "red";
-    document.getElementById("table").innerHTML = " ";
-}
+//changes the snake's direction
+document.addEventListener('keyup', (event) => {
+    var headRow = snakeRow[snakeRow.length - 1];
+    var headColumn = snakeColumn[snakeColumn.length - 1];
+    clearTimeout(timeout);
+    var arrow = {
+      ArrowUp: [headRow - 1, headColumn],
+      ArrowDown: [headRow + 1, headColumn],
+      ArrowLeft: [headRow, headColumn - 1],
+      ArrowRight: [headRow, headColumn + 1]
+    };
+    for (const [key, value] of Object.entries(arrow)) {
+      if(event.key == `${key}`) {
+        var cell = `${value}`;
+        checkSnake(parseInt(cell[0]), parseInt(cell[cell.length - 1]), event.key);
+      }
+    }
+});
 
 function restartGame() {
   location.reload();
