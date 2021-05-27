@@ -63,7 +63,7 @@ document.addEventListener('keyup', (event) => {
     for (const [key, value] of Object.entries(arrow)) {
       if(event.key == `${key}`) {
         var cell = `${value}`;
-        checkSnake(parseInt(cell[0]), parseInt(cell[2]), event.key);
+        checkSnake(parseInt(cell[0]), parseInt(cell[cell.length - 1]), event.key);
       }
     }
 });
@@ -97,18 +97,28 @@ function updateSnake(row, column, key) {
     updateSnakeHead(row, column);
   }
   table[row][column] = 1;
-  if (key == "ArrowRight") {
-    timeout = setTimeout(function(){checkSnake(row, column + 1, "ArrowRight")}, 500);
-  }
-  if (key == "ArrowLeft") {
-    timeout = setTimeout(function(){checkSnake(row, column - 1, "ArrowLeft")}, 500);
-  }
-  if (key == "ArrowUp") {
-    timeout = setTimeout(function(){checkSnake(row - 1, column, "ArrowUp")}, 500);
-  }
-  if (key == "ArrowDown") {
-    timeout = setTimeout(function(){checkSnake(row + 1, column, "ArrowDown")}, 500);
-  }
+  var arrow = {
+    ArrowUp: [row - 1, column],
+    ArrowDown: [row + 1, column],
+    ArrowLeft: [row, column - 1],
+    ArrowRight: [row, column + 1]
+  };
+   for (const [keys, value] of Object.entries(arrow)) {
+     if (key == `${keys}`) {
+      var cell = `${value}`;
+      var checkedRow = '', checkedColumn = '', n = '';
+      for (var i = 0; i < cell.length; i++) {
+        if (cell[i] != ',') {
+          n += cell[i];
+        } else {
+          checkedRow = n;
+          n = '';
+        }
+      }
+      checkedColumn = n;
+      timeout = setTimeout(function(){checkSnake(parseInt(checkedRow), parseInt(checkedColumn), key)}, 500);
+     }
+   }
 }
 
 //checks if snake is on the game board
