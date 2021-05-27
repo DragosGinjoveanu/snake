@@ -103,22 +103,8 @@ function updateSnake(row, column, key) {
     ArrowLeft: [row, column - 1],
     ArrowRight: [row, column + 1]
   };
-   for (const [keys, value] of Object.entries(arrow)) {
-     if (key == `${keys}`) {
-      var cell = `${value}`;
-      var checkedRow = '', checkedColumn = '', n = '';
-      for (var i = 0; i < cell.length; i++) {
-        if (cell[i] != ',') {
-          n += cell[i];
-        } else {
-          checkedRow = n;
-          n = '';
-        }
-      }
-      checkedColumn = n;
-      timeout = setTimeout(function(){checkSnake(parseInt(checkedRow), parseInt(checkedColumn), key)}, 500);
-     }
-   }
+  var cell = arrow[key];
+  timeout = setTimeout(function(){checkSnake(parseInt(cell[0]), parseInt(cell[cell.length - 1]), key)}, 500);
 }
 
 //checks if snake is on the game board
